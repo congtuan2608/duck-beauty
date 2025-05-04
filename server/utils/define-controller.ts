@@ -7,19 +7,30 @@ import {
 } from "h3";
 import { v7 as uuid } from "uuid";
 
+type FuncHandler<Request, Response> = EventHandler<
+  Request extends EventHandlerRequest ? Request : EventHandlerRequest,
+  Request extends EventHandlerRequest ? Response : Request
+>;
+
+type ControllerConfig = {
+  middlewares?: Array<(event: H3Event) => Promise<unknown> | unknown>;
+};
+
 export function defineController<
   Request = EventHandlerRequest,
   Response = EventHandlerResponse
->(
-  handler: EventHandler<
-    Request extends EventHandlerRequest ? Request : EventHandlerRequest,
-    Request extends EventHandlerRequest ? Response : Request
-  >
-) {
+>(handler: FuncHandler<Request, Response>, config?: ControllerConfig) {
   return defineEventHandler(async (event: H3Event) => {
     const requestId = uuid();
     try {
       console.log(`[Controller][${requestId}][${event.path}] \nStarted`);
+
+      // ✨ Run all middlewares in order
+      if (config?.middlewares?.length) {
+        for (const middleware of config.middlewares) {
+          await middleware(event);
+        }
+      }
 
       const response = await handler(event);
 
