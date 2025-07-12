@@ -1,0 +1,12 @@
+{
+  "appTrendSnap": {
+    "title": "Ứng dụng Trend Snap",
+    "description": "Một ứng dụng đơn giản để minh họa việc sử dụng lớp Ứng dụng Trend Snap.",
+    "page": {},
+    "components": {
+      "mobile": {},
+      "desktop": {},
+      "platform": {}
+    }
+  }
+}

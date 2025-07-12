@@ -1,0 +1,5 @@
+Thư mục này chứa các hàm tiện ích dùng chung trong toàn dự án.
+
+Ví dụ: xử lý định dạng chuỗi, ngày giờ, màu sắc, kiểm tra loại thiết bị, tính toán layout, v.v.
+
+Tất cả các file trong đây nên là các hàm pure function (không phụ thuộc vào UI hoặc trạng thái global).

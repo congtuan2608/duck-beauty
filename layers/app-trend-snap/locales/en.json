@@ -1,0 +1,12 @@
+{
+  "appTrendSnap": {
+    "title": "App Trend Snap",
+    "description": "A simple app to demonstrate the use of the App Trend Snap layer.",
+    "page": {},
+    "components": {
+      "mobile": {},
+      "desktop": {},
+      "platform": {}
+    }
+  }
+}

@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../../node_modules/@prisma/trend-snap" 
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL_DUCK_BEAUTY_SERVICE")
+}
+
+// 📦 Collection: pose_categories
+// 👉 Mục đích: Nhóm các Pose Trend theo chủ đề (vd: selfie, couple, outdoor, vintage...)
+// 👉 Giúp người dùng dễ lọc, phân loại và tổ chức trend
+model PoseCategory {
+  id       String      @id @default(auto()) @map("_id") @db.ObjectId
+  name     String      @unique
+  slug     String      @unique
+  icon     String?     // Optional emoji hoặc URL icon
+  trends   PoseTrend[] // 1-n
+}
+
+
+// 📸 Collection: pose_trends
+// 👉 Mục đích: Lưu thông tin về các xu hướng tạo dáng chụp ảnh
+// 👉 Mỗi trend có tiêu đề, ảnh đại diện, mô tả, hướng dẫn tạo dáng và các tag
+model PoseTrend {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  slug         String         @unique
+  imageUrl     String
+  description  String?
+  instructions String?
+  tags         String[]
+  isPublished Boolean @default(false) // Dùng để kiểm duyệt hoặc làm trạng thái nháp
+  views       Int     @default(0)     // Lượt xem (để sorting dễ hơn)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Category relation
+  categoryId  String?         @db.ObjectId
+  category    PoseCategory?   @relation(fields: [categoryId], references: [id])
+  // poseProducts relation
+  poseProducts PoseProduct[]  // Relation
+}
+
+// 🛍️ Collection: pose_products
+// 👉 Mục đích: Lưu danh sách sản phẩm xuất hiện trong ảnh pose trend
+// 👉 Dùng để chèn link affiliate (Shopee, TikTok Shop, v.v.) kiếm doanh thu
+model PoseProduct {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  poseTrendId  String      @db.ObjectId
+  name         String
+  imageUrl     String
+  affiliateUrl String
+  platform     String
+  price        Int?
+  currency     String?    @default("VND")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  poseTrend    PoseTrend  @relation(fields: [poseTrendId], references: [id])
+}

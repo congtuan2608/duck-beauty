@@ -11,9 +11,11 @@
     "postinstall": "nuxt prepare",
     "prisma:generate:auth": "prisma generate --schema=./layers/app-auth/server/prisma/schema.prisma",
     "prisma:generate:nail": "prisma generate --schema=./layers/app-nail/server/prisma/schema.prisma",
-    "prisma:generate": "pnpm run prisma:generate:auth && pnpm run prisma:generate:nail",
+    "prisma:generate:trend-snap": "prisma generate --schema=./layers/app-trend-snap/server/prisma/schema.prisma",
+    "prisma:generate": "pnpm run prisma:generate:auth && pnpm run prisma:generate:nail && pnpm run prisma:generate:trend-snap",
     "prisma:db:push:auth": "prisma db push --schema=./layers/app-auth/server/prisma/schema.prisma",
-    "prisma:db:push": "pnpm run prisma:db:push:auth"
+    "prisma:db:push:trend-snap": "prisma db push --schema=./layers/app-trend-snap/server/prisma/schema.prisma",
+    "prisma:db:push": "pnpm run prisma:db:push:auth && pnpm run prisma:db:push:trend-snap"
   },
   "dependencies": {
     "@nuxt/eslint": "^1.1.0",
